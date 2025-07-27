@@ -29,7 +29,7 @@ data:
 training:
   model_output_dir: "models/"
   test_size: 0.2
-  n_trials_optuna: 2
+  n_trials_optuna: 200
 
   features:
     feature_type: "rdkit"  # "rdkit", "mordred", "morgan"  
@@ -39,16 +39,6 @@ training:
       n_bits: 2048
 
     corr_threshold: 0.7
-
-
-# ====== ГЕНЕРАЦИЯ ======
-
-generation:
-  prior_path: "models/reinvent/reinvent.prior"
-  output_dir: "data/04_generated"
-  num_smiles: 10000
-  seed_source: "CHEMBL4822_processed.csv"
-  num_seed_molecules: 100
 
 
 # ====== ОТБОР ======
