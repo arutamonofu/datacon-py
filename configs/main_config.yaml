@@ -1,0 +1,64 @@
+# configs/main_config.yaml
+
+project_name: "datacon"
+random_state: 42
+
+
+# ====== ДАННЫЕ ======
+
+data:
+  # Названия столбцом
+  smiles_col: "canonical_smiles"
+  target_col: "pIC50"
+
+  # Директории
+  raw_dir: "data/01_raw/"
+  processed_dir: "data/02_processed/"
+  features_dir: "data/03_features/"
+  graphs_dir_gnn: "data/03_graphs/"
+  generated_dir: "data/04_generated"
+  selected_dir: "data/05_selected"
+
+  # Идентификаторы мишеней для скачивания
+  chembl_target_id: "CHEMBL4822"  # BACE <- "CHEMBL4822", тау-белок <- "CHEMBL1293224"
+  pubchem_accession: "P56817"  # BACE <- "P56817", тау-белок <- "P10636"
+
+
+# ====== ОБУЧЕНИЕ ======
+
+training:
+  model_output_dir: "models/"
+  test_size: 0.2
+  n_trials_optuna: 2
+
+  features:
+    feature_type: "rdkit"  # "rdkit", "mordred", "morgan"  
+
+    morgan:
+      radius: 2
+      n_bits: 2048
+
+    corr_threshold: 0.7
+
+
+# ====== ГЕНЕРАЦИЯ ======
+
+generation:
+  prior_path: "models/reinvent/reinvent.prior"
+  output_dir: "data/04_generated"
+  num_smiles: 10000
+  seed_source: "CHEMBL4822_processed.csv"
+  num_seed_molecules: 100
+
+
+# ====== ОТБОР ======
+
+selection:
+  programmatic:
+    qed: "> 0.6"
+    sa_score: "< 5.0"
+    lipinski_violations: "< 2"
+    has_pains: "== False"
+    has_brenk: "== False"
+    predict_bbb: "== True"
+  predicted_pIC50: ">= 6.0"
