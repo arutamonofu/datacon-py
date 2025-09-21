@@ -1,3 +1,5 @@
+# scripts/generate_molecules.py
+
 import sys
 from pathlib import Path
 

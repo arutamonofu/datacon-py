@@ -1,4 +1,4 @@
-# src/data/build_features.py
+# src/data/descriptors.py
 
 import pandas as pd
 import numpy as np

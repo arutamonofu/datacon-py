@@ -1,4 +1,4 @@
-# src/predictor/xgb.py
+# src/predictor.py
 
 import pandas as pd
 import numpy as np

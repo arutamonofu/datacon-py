@@ -1,4 +1,4 @@
-# scripts/01_prepare_dataset.py
+# scripts/prepare_data.py
 
 import sys
 from pathlib import Path

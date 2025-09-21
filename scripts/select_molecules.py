@@ -1,10 +1,9 @@
-# scripts/03_filter_and_predict.py
+# scripts/select_molecules.py
 
 import sys
 from pathlib import Path
 import pandas as pd
 import json
-from torch_geometric.data import DataLoader
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(PROJECT_ROOT))

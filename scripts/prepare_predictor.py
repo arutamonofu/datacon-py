@@ -1,4 +1,4 @@
-# scripts/02_train_model.py
+# scripts/prepare_predictor.py
 
 from pathlib import Path
 import sys
@@ -26,38 +26,19 @@ def main():
     target_id = data_cfg["chembl_target_id"]
 
     # Модель
-    model_type = config["model_type"]
+    training_cfg = config["training"]
 
-    if model_type == "xgb":
-        xgb_train_cfg = config["training_xgb"]
+    # Данные
+    feature_type = training_cfg["features"]["feature_type"]
+    data_path = PROJECT_ROOT / data_cfg["features_dir"] / f"{target_id}_{feature_type}.csv"
 
-        # Данные
-        feature_type = xgb_train_cfg["features"]["feature_type"]
-        data_path = PROJECT_ROOT / data_cfg["features_dir"] / f"{target_id}_{feature_type}.csv"
+    # Пути сохранения
+    model_dir = PROJECT_ROOT / training_cfg['model_output_dir']
+    model_output_path = model_dir / "model.joblib"
+    columns_output_path = model_dir / "columns.json"
 
-        # Пути сохранения
-        model_dir = PROJECT_ROOT / xgb_train_cfg['model_output_dir']
-        model_output_path = model_dir / "model.joblib"
-        columns_output_path = model_dir / "columns.json"
-
-        # Создание папок, если нет
-        model_dir.mkdir(parents=True, exist_ok=True)
-
-    elif model_type == "gnn":
-        gnn_train_cfg = config['training_gnn']
-
-        # Данные
-        data_path = PROJECT_ROOT / data_cfg['processed_dir'] / f"all_processed.csv"
-        graphs_dir = PROJECT_ROOT / data_cfg['graphs_dir_gnn']
-
-        # Пути сохранения 
-        model_dir = PROJECT_ROOT / gnn_train_cfg['model_output_dir']
-        model_output_path = model_dir / "model.pth"
-        graphs_dir = PROJECT_ROOT / data_cfg['graphs_dir_gnn']
-
-        # Создание папок, если нет
-        model_dir.mkdir(parents=True, exist_ok=True)
-        graphs_dir.mkdir(parents=True, exist_ok=True)
+    # Создание папок, если нет
+    model_dir.mkdir(parents=True, exist_ok=True)
 
 
     # ====== 1. ОБУЧЕНИЕ ======
@@ -67,9 +48,9 @@ def main():
         model_output_path=model_output_path,
         smiles_col=smiles_col,
         target_col=target_col,
-        test_size=xgb_train_cfg['test_size'],
+        test_size=training_cfg['test_size'],
         random_state=config['random_state'],
-        n_trials=xgb_train_cfg['n_trials_optuna']
+        n_trials=training_cfg['n_trials_optuna']
     )
     print(f"✓ Модель обучена и сохранена в: {model_output_path}")
 
